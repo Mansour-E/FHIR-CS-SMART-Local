@@ -4,5 +4,17 @@
         <name>smart-local</name>
     </assembly>
     <members>
+        <member name="T:smart_local.Program">
+            <summary>
+            Main program
+            </summary>
+        </member>
+        <member name="M:smart_local.Program.Main(System.String)">
+            <summary>
+            Program to access a SMART FHIR Server with a local webserver for redirection
+            </summary>
+            <param name="fhirServerUrl">FHIR R4 endpoint URL</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

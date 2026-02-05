@@ -9,6 +9,15 @@
             FHIR Utility functions
             </summary>
         </member>
+        <member name="M:smart_local.FhirUtils.GetSmartUrls(Hl7.Fhir.Rest.FhirClient,System.String@,System.String@)">
+            <summary>
+            to get the authorization URL and token URL 
+            </summary>
+            <param name="fhirClient">sdf</param>
+            <param name="authorizeUrl">sdf</param>
+            <param name="tokenUrl">sdf</param>
+            <returns></returns>
+        </member>
         <member name="T:smart_local.Program">
             <summary>
             Main program

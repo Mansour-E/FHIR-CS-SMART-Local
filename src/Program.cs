@@ -24,7 +24,7 @@ namespace smart_local
                 fhirServerUrl = _defaultFhirServerUrl;
             }
 
-            System.Console.WriteLine($"FHIR Server: {fhirServerUrl}");
+            Console.WriteLine($"FHIR Server: {fhirServerUrl}");
             
             return 0;
         }

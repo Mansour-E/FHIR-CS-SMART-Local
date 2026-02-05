@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("smart-local")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e77054b321afe830c4f42ed168b2f4c8f534fe47")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76b9150c4a77bda7e6a5768d4225819f5ea0fa57")]
 [assembly: System.Reflection.AssemblyProductAttribute("smart-local")]
 [assembly: System.Reflection.AssemblyTitleAttribute("smart-local")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -11,6 +11,13 @@ namespace smart_local
     /// </summary>
     public static class FhirUtils
     {
+        /// <summary>
+        /// to get the authorization URL and token URL 
+        /// </summary>
+        /// <param name="fhirClient">sdf</param>
+        /// <param name="authorizeUrl">sdf</param>
+        /// <param name="tokenUrl">sdf</param>
+        /// <returns></returns>
         public static bool GetSmartUrls(
             FhirClient fhirClient,
             out string authorizeUrl,

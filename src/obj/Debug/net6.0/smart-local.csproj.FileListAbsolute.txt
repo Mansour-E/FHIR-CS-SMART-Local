@@ -19,10 +19,11 @@ C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\bin\Debug\net6.0\Ne
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\bin\Debug\net6.0\System.CommandLine.dll
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\bin\Debug\net6.0\System.CommandLine.DragonFruit.dll
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\bin\Debug\net6.0\System.CommandLine.Rendering.dll
-C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-local.csproj.CopyComplete
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-local.dll
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\refint\smart-local.dll
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-local.xml
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-local.pdb
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-local.genruntimeconfig.cache
 C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\ref\smart-local.dll
+C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-local.sourcelink.json
+C:\Users\mansu\OneDrive\Desktop\FHIR\FHIR-CS-SMART-Local\src\obj\Debug\net6.0\smart-lo.6BF0818F.Up2Date

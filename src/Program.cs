@@ -24,7 +24,19 @@ namespace smart_local
                 fhirServerUrl = _defaultFhirServerUrl;
             }
 
-            Console.WriteLine($"FHIR Server: {fhirServerUrl}");
+            System.Console.WriteLine($"FHIR Server: {fhirServerUrl}");
+
+            Hl7.Fhir.Rest.FhirClient fhirClient = new Hl7.Fhir.Rest.FhirClient(fhirServerUrl);
+
+            if(!FhirUtils.GetSmartUrls(fhirClient, out string authorizeUrl , out string tokenUrl))
+            {
+                System.Console.WriteLine($"Failed to discover SMART URLs");
+                return -1;
+            }
+
+            System.Console.WriteLine($"   FHIR Server: {fhirServerUrl}");
+            System.Console.WriteLine($" Authorize URL: {authorizeUrl}");
+            System.Console.WriteLine($"     Token URL: {tokenUrl}");
             
             return 0;
         }

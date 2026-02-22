@@ -28,14 +28,16 @@ namespace smart_local
 
             FhirClient fhirClient = new FhirClient(fhirServerUrl);
 
-            if (!FhirUtils.TryGetSmartUrls(fhirClient, out string authorizeUrl , out string tokenUrl))
+            if(!FhirUtils.TryGetSmartUrls(fhirClient, out string authorizeUrl , out string tokenUrl))
             {
-                System.Console.WriteLine($"Faild to discover SMART URLs");
-                return -1;
+                System.Console.WriteLine($"Failed to discover SMART configuration");
+                
             }
 
+            
+
             System.Console.WriteLine($"Authorize URL: {authorizeUrl}");
-            System.Console.WriteLine($"Authorize URL: {tokenUrl}");
+            System.Console.WriteLine($"Token URL: {tokenUrl}");
            return 0;
         }
     }

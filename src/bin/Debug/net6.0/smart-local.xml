@@ -4,30 +4,16 @@
         <name>smart-local</name>
     </assembly>
     <members>
-        <member name="T:smart_local.FhirUtils">
-            <summary>
-            FHIR Utility functions
-            </summary>
-        </member>
-        <member name="M:smart_local.FhirUtils.GetSmartUrls(Hl7.Fhir.Rest.FhirClient,System.String@,System.String@)">
-            <summary>
-            to get the authorization URL and token URL 
-            </summary>
-            <param name="fhirClient">sdf</param>
-            <param name="authorizeUrl">sdf</param>
-            <param name="tokenUrl">sdf</param>
-            <returns></returns>
-        </member>
         <member name="T:smart_local.Program">
             <summary>
-            Main program
+            Main Program
             </summary>
         </member>
         <member name="M:smart_local.Program.Main(System.String)">
             <summary>
             Program to access a SMART FHIR Server with a local webserver for redirection
             </summary>
-            <param name="fhirServerUrl">FHIR R4 endpoint URL</param>
+            <param name="fhirServerUrl"></param>
             <returns></returns>
         </member>
     </members>

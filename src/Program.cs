@@ -1,4 +1,5 @@
 ﻿using System;
+using Hl7.Fhir.Rest;
 
 namespace smart_local
 {
@@ -25,6 +26,16 @@ namespace smart_local
 
             System.Console.WriteLine($"FHIR Server: {fhirServerUrl}");
 
+            FhirClient fhirClient = new FhirClient(fhirServerUrl);
+
+            if (!FhirUtils.TryGetSmartUrls(fhirClient, out string authorizeUrl , out string tokenUrl))
+            {
+                System.Console.WriteLine($"Faild to discover SMART URLs");
+                return -1;
+            }
+
+            System.Console.WriteLine($"Authorize URL: {authorizeUrl}");
+            System.Console.WriteLine($"Authorize URL: {tokenUrl}");
            return 0;
         }
     }

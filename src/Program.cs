@@ -1,5 +1,7 @@
 ﻿using System;
 using Hl7.Fhir.Rest;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace smart_local
 {
@@ -31,14 +33,30 @@ namespace smart_local
             if(!FhirUtils.TryGetSmartUrls(fhirClient, out string authorizeUrl , out string tokenUrl))
             {
                 System.Console.WriteLine($"Failed to discover SMART configuration");
-                
+                return -1;
             }
 
             
 
             System.Console.WriteLine($"Authorize URL: {authorizeUrl}");
-            System.Console.WriteLine($"Token URL: {tokenUrl}");
+            System.Console.WriteLine($"    Token URL: {tokenUrl}");
+
+            CreateHostBuilder().Build().Run();
+
            return 0;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public static IHostBuilder CreateHostBuilder() =>
+        
+            Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(WebHostBuilder =>
+                {
+                    WebHostBuilder.UseStartup<Startup>();
+                });
     }
 }

@@ -27,7 +27,7 @@ namespace smart_local
             {
                 if (restComponent.Security == null)
                 {
-                    throw new Exception("No Security element found.");
+                    continue;
                 }
 
                 foreach (Extension securityExt in restComponent.Security.Extension)
@@ -47,7 +47,7 @@ namespace smart_local
                         switch (smartExt.Url)
                         {
                             case "authorize":
-                                tokenUrl = ((FhirUri)smartExt.Value).Value.ToString();
+                                authorizeUrl = ((FhirUri)smartExt.Value).Value.ToString();
                                 break;
 
                             case "token":

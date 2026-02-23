@@ -21,5 +21,12 @@
             <param name="fhirServerUrl"></param>
             <returns></returns>
         </member>
+        <member name="M:smart_local.Program.CreateHostBuilder">
+            <summary>
+            
+            </summary>
+            <param name=""></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

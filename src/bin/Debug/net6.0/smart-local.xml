@@ -21,12 +21,29 @@
             <param name="fhirServerUrl"></param>
             <returns></returns>
         </member>
+        <member name="M:smart_local.Program.StartWebServerInBackground">
+            <summary>
+            start the webserver in the background and wait for it to initialize
+            </summary>
+        </member>
+        <member name="M:smart_local.Program.GetListenPort">
+            <summary>
+            Determin the listening port of the web server
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
         <member name="M:smart_local.Program.CreateHostBuilder">
             <summary>
             
             </summary>
             <param name=""></param>
             <returns></returns>
+        </member>
+        <member name="P:smart_local.Startup.Addresseses">
+            <summary>
+            List of the webServer addresses in use
+            </summary>
         </member>
     </members>
 </doc>

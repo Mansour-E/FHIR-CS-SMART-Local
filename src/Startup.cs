@@ -8,11 +8,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 
 namespace smart_local
 {
     public class Startup
     {
+
+        private static IServerAddressesFeature _addresses = null;
+        /// <summary>
+        /// List of the webServer addresses in use
+        /// </summary>
+        public static IServerAddressesFeature Addresseses => _addresses;
         public void ConfigureServices(IServiceCollection services)
         {
         }
@@ -23,6 +30,8 @@ namespace smart_local
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            _addresses = app.ServerFeatures.Get<IServerAddressesFeature>();
 
             app.UseRouting();
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection.PortableExecutable;
 using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -41,11 +43,66 @@ namespace smart_local
             System.Console.WriteLine($"Authorize URL: {authorizeUrl}");
             System.Console.WriteLine($"    Token URL: {tokenUrl}");
 
-            CreateHostBuilder().Build().Run();
+            
+            Task.Run(() => CreateHostBuilder().Build().Run());
+            int listenPort = GetListenPort().Result;
+
+            System.Console.WriteLine($" Listening on : {listenPort}");
+
+            for ( int i = 0; i < 30 ; i++)
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
 
            return 0;
         }
 
+        /// <summary>
+        /// start the webserver in the background and wait for it to initialize
+        /// </summary>
+        public static async void StartWebServerInBackground()
+        {
+            
+            await Task.Delay(500);
+        }
+
+        /// <summary>
+        /// Determin the listening port of the web server
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static async Task<int> GetListenPort()
+        {
+            await Task.Delay(500);
+
+           for ( int loops = 0; loops < 100; loops++)
+            {
+                await Task.Delay(500);
+                if (Startup.Addresseses == null)
+                {
+                    continue;
+                }
+                string address = Startup.Addresseses.Addresses.FirstOrDefault();
+
+                if (string.IsNullOrEmpty(address))
+                {
+                    continue;
+                }
+
+                if (address.Length < 18)
+                {
+                    continue;
+                }
+
+                if ((int.TryParse(address.Substring(17), out int port)) && (port != 0))
+                {
+                    return port;
+                }
+
+            }
+
+            throw new Exception($"Failed to get listen port!");
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -54,9 +111,11 @@ namespace smart_local
         public static IHostBuilder CreateHostBuilder() =>
         
             Host.CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(WebHostBuilder =>
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    WebHostBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://127.0.0.1:0");
+                    webBuilder.UseKestrel();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }

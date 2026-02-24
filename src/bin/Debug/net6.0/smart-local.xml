@@ -21,6 +21,13 @@
             <param name="fhirServerUrl"></param>
             <returns></returns>
         </member>
+        <member name="M:smart_local.Program.SetAuthCode(System.String,System.String)">
+            <summary>
+            Set the authorizeation code and state
+            </summary>
+            <param name="code"></param>
+            <param name="state"></param>
+        </member>
         <member name="M:smart_local.Program.LaunchUrl(System.String)">
             <summary>
             Launch a URL in the user's default web browser

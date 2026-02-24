@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.Extensions.Primitives;
+using Hl7.Fhir.Model;
 
 namespace smart_local
 {
@@ -39,7 +41,29 @@ namespace smart_local
             {
                 endpoints.MapGet("/" , async context =>
                 {
-                    await context.Response.WriteAsync("Hello World");
+                    string code = string.Empty;
+                    string state = string.Empty;
+
+                    IQueryCollection query = context.Request.Query;
+
+                    foreach (KeyValuePair<string, StringValues> kvp in query)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "code":
+                                code = kvp.Value.FirstOrDefault();
+                                break;
+
+                            case "state":
+                                state = kvp.Value.FirstOrDefault();
+                                break;
+                        }
+                    }
+
+                    System.Threading.Tasks.Task.Run(() => Program.SetAuthCode(code, state));
+
+                    await context.Response.WriteAsync("Code received, you may close this window.");
+
                 });
             });
         }

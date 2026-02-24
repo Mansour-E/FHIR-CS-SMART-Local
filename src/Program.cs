@@ -16,7 +16,18 @@ namespace smart_local
     /// </summary>
     public static class Program
     {
+        private const string _clientId = "fhir_demo_id";
+
         private const string _defaultFhirServerUrl = "https://launch.smarthealthit.org/v/r4/sim/WzIsIiIsIjFjYjUxMTU3LTgwODMtNDEwZi04N2QxLTA3YTk0NjI5MjIyYSIsIkFVVE8iLDAsMCwwLCIiLCIiLCIiLCIiLCIiLCIiLCIiLDAsMSwiIl0/fhir";
+
+        private static string _authCode = string.Empty;
+        private static string _clientState = string.Empty;
+
+        private static string _redirectUrl = string.Empty;
+
+        private static string _tokenUrl = string.Empty;
+
+
 
 
         /// <summary>
@@ -45,13 +56,14 @@ namespace smart_local
 
             System.Console.WriteLine($"Authorize URL: {authorizeUrl}");
             System.Console.WriteLine($"    Token URL: {tokenUrl}");
-
+            _tokenUrl = tokenUrl;
             
             Task.Run(() => CreateHostBuilder().Build().Run());
 
             int listenPort = GetListenPort().Result;
 
             System.Console.WriteLine($" Listening on : {listenPort}");
+            _redirectUrl = $"http://127.0.0.1:{listenPort}";
 
             //
             // Location: https://ehr/authorize?
@@ -67,8 +79,8 @@ namespace smart_local
             string url =
                 $"{authorizeUrl}" +
                 $"?response_type=code" +
-                $"&client_id=fhir_demo_id" +
-                $"&redirect_uri={HttpUtility.UrlEncode($"http://127.0.0.1:{listenPort}")}" +
+                $"&client_id={_clientId}" +
+                $"&redirect_uri={HttpUtility.UrlEncode(_redirectUrl)}" +
                 $"&scope={HttpUtility.UrlEncode("openid fhirUser profile launch/patient patient/*.read")}" + 
                 $"&state=local_state" + 
                 $"&aud={fhirServerUrl}";
@@ -83,6 +95,51 @@ namespace smart_local
             }
 
            return 0;
+        }
+
+        /// <summary>
+        /// Set the authorizeation code and state
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="state"></param>
+        public static async void SetAuthCode(string code, string state)
+        {
+            _authCode = code;
+            _clientState = state;
+
+            System.Console.WriteLine($"Code received: {code}");
+
+            Dictionary<string, string> requestValues = new Dictionary<string, string>()
+            {
+                {"grant_type", "authorization_code"},
+                {"code", code},
+                {"redirect_uri", _redirectUrl},
+                {"client_id" , _clientId},
+            };
+
+            HttpRequestMessage request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(_tokenUrl),
+                Content = new FormUrlEncodedContent(requestValues),
+
+            };
+
+            HttpClient client = new HttpClient();
+
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                System.Console.WriteLine($"Failed to exchange code for token!");
+                throw new Exception($"Unauthorized: {response.StatusCode}");
+            }
+
+            string json = await response.Content.ReadAsStringAsync();
+
+            System.Console.WriteLine($"----- token -----");
+            System.Console.WriteLine(json);
+            System.Console.WriteLine($"----- token -----");
         }
 
         /// <summary>

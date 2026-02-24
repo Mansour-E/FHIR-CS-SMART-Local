@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.Web;
 
 namespace smart_local
 {
@@ -45,11 +48,36 @@ namespace smart_local
 
             
             Task.Run(() => CreateHostBuilder().Build().Run());
+
             int listenPort = GetListenPort().Result;
 
             System.Console.WriteLine($" Listening on : {listenPort}");
 
-            for ( int i = 0; i < 30 ; i++)
+            //
+            // Location: https://ehr/authorize?
+            // response_type=code&
+            // client_id=app-client-id&
+            // redirect_uri=https%3A%2F%2Fapp%2Fafter-auth&
+            // launch=xyz123&
+            // scope=launch+patient%2FObservation.rs+patient%2FPatient.rs+openid+fhirUser&
+            // state=98wrghuwuogerg97&
+            // aud=https://ehr/fhir
+            //
+
+            string url =
+                $"{authorizeUrl}" +
+                $"?response_type=code" +
+                $"&client_id=fhir_demo_id" +
+                $"&redirect_uri={HttpUtility.UrlEncode($"http://127.0.0.1:{listenPort}")}" +
+                $"&scope={HttpUtility.UrlEncode("openid fhirUser profile launch/patient patient/*.read")}" + 
+                $"&state=local_state" + 
+                $"&aud={fhirServerUrl}";
+
+            LaunchUrl(url);
+
+            //http://127.0.0.1:53357/?code=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250ZXh0Ijp7Im5lZWRfcGF0aWVudF9iYW5uZXIiOnRydWUsInNtYXJ0X3N0eWxlX3VybCI6Imh0dHBzOi8vbGF1bmNoLnNtYXJ0aGVhbHRoaXQub3JnL3NtYXJ0LXN0eWxlLmpzb24iLCJwYXRpZW50IjoiNzc1YWU0NTUtNzk2Ni00MTZlLThkMDQtZmQwYjhmZGFjMjhmIn0sImNsaWVudF9pZCI6ImZoaXJfZGVtb19pZCIsInJlZGlyZWN0X3VyaSI6Imh0dHA6Ly8xMjcuMC4wLjE6NTMzNTciLCJzY29wZSI6Im9wZW5pZCBmaGlyVXNlciBwcm9maWxlIGxhdW5jaC9wYXRpZW50IHBhdGllbnQvKi5yZWFkIiwicGtjZSI6ImF1dG8iLCJjbGllbnRfdHlwZSI6InB1YmxpYyIsInVzZXIiOiJQcmFjdGl0aW9uZXIvMWNiNTExNTctODA4My00MTBmLTg3ZDEtMDdhOTQ2MjkyMjJhIiwiaWF0IjoxNzcxOTQ3MDIxLCJleHAiOjE3NzE5NDczMjF9.ZabxiRHPpMoEbNASWuvr0GyDvq_NrID9hznNnfDKdZ4&state=local_state
+
+            for ( int i = 0; i < 5 ; i++)
             {
                 System.Threading.Thread.Sleep(1000);
             }
@@ -58,13 +86,76 @@ namespace smart_local
         }
 
         /// <summary>
-        /// start the webserver in the background and wait for it to initialize
+        /// Launch a URL in the user's default web browser
         /// </summary>
-        public static async void StartWebServerInBackground()
+        /// <param name="url"></param>
+        /// <returns>true if seccessful , false otherweise </returns>
+        public static bool LaunchUrl(string url)
         {
-            
-            await Task.Delay(500);
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    FileName = url,
+                    UseShellExecute = true,
+                };
+
+                Process.Start(startInfo);
+                return true;
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                try
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd" , $"/c start {url}"){CreateNoWindow = true});
+                    return true;
+                }
+                catch (System.Exception)
+                {
+                    //ignore
+                }
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                string[] allowedProgramsToRun = {"xdg-open","gnome-open","kfmclient"};
+
+                foreach ( string helper in allowedProgramsToRun)
+                {
+                    try
+                    {
+                        Process.Start(helper, url);
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        //egal
+                    }
+                }
+
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                try
+                {
+                    Process.Start("open",url);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
+            }
+
+            System.Console.WriteLine($"Fained to launch URL");
+            return false;
         }
+
 
         /// <summary>
         /// Determin the listening port of the web server
@@ -94,7 +185,7 @@ namespace smart_local
                     continue;
                 }
 
-                if ((int.TryParse(address.Substring(17), out int port)) && (port != 0))
+                if (int.TryParse(address.Substring(17), out int port) && (port != 0))
                 {
                     return port;
                 }

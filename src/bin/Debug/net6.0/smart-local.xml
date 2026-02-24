@@ -21,10 +21,12 @@
             <param name="fhirServerUrl"></param>
             <returns></returns>
         </member>
-        <member name="M:smart_local.Program.StartWebServerInBackground">
+        <member name="M:smart_local.Program.LaunchUrl(System.String)">
             <summary>
-            start the webserver in the background and wait for it to initialize
+            Launch a URL in the user's default web browser
             </summary>
+            <param name="url"></param>
+            <returns>true if seccessful , false otherweise </returns>
         </member>
         <member name="M:smart_local.Program.GetListenPort">
             <summary>

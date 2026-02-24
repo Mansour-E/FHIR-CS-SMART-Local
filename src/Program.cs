@@ -65,7 +65,7 @@ namespace smart_local
             System.Console.WriteLine($"    Token URL: {tokenUrl}");
             _tokenUrl = tokenUrl;
             
-            Task.Run(() => CreateHostBuilder().Build().Run());
+            System.Threading.Tasks.Task.Run(() => CreateHostBuilder().Build().Run());
 
             int listenPort = GetListenPort().Result;
 
@@ -149,6 +149,8 @@ namespace smart_local
             System.Console.WriteLine($"----- Authorization Response -----");
 
             SmartResponse smartResponse = JsonSerializer.Deserialize<SmartResponse>(json);
+
+            Task.Run(() => DoSomethingWithToken(smartResponse));
         }
 
         /// <summary>
@@ -168,6 +170,13 @@ namespace smart_local
             }
 
             Hl7.Fhir.Rest.FhirClient fhirClient = new Hl7.Fhir.Rest.FhirClient(_fhirServerUrl);
+            fhirClient.OnBeforeRequest += (object sender, Hl7.Fhir.Rest.BeforeRequestEventArgs e) =>
+            {
+                e.RawRequest.Headers.Add("Authorization" , $"Bearer {smartResponse.AccessToken}");
+            };
+
+            Hl7.Fhir.Model.Patient patient = fhirClient.Read<Hl7.Fhir.Model.Patient>($"Patient/{smartResponse.PatientId}");
+            System.Console.WriteLine($"Read back patient: {patient.Name[0].ToString()}");
         }
 
         /// <summary>

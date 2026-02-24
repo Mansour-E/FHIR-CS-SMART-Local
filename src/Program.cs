@@ -137,9 +137,9 @@ namespace smart_local
 
             string json = await response.Content.ReadAsStringAsync();
 
-            System.Console.WriteLine($"----- token -----");
+            System.Console.WriteLine($"----- Authorization Response -----");
             System.Console.WriteLine(json);
-            System.Console.WriteLine($"----- token -----");
+            System.Console.WriteLine($"----- Authorization Response -----");
         }
 
         /// <summary>

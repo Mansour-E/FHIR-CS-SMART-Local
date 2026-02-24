@@ -49,6 +49,11 @@
             <param name=""></param>
             <returns></returns>
         </member>
+        <member name="T:smart_local.SmartResponse">
+            <summary>
+            class to deserialize SMART auth responses.
+            </summary>
+        </member>
         <member name="P:smart_local.Startup.Addresseses">
             <summary>
             List of the webServer addresses in use

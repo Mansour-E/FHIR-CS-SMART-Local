@@ -3,10 +3,13 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Web;
+
 
 namespace smart_local
 {
@@ -27,6 +30,8 @@ namespace smart_local
 
         private static string _tokenUrl = string.Empty;
 
+        private static string _fhirServerUrl = string.Empty;
+
 
 
 
@@ -43,6 +48,8 @@ namespace smart_local
             }
 
             System.Console.WriteLine($"FHIR Server: {fhirServerUrl}");
+            _fhirServerUrl = fhirServerUrl;
+
 
             FhirClient fhirClient = new FhirClient(fhirServerUrl);
 
@@ -140,6 +147,27 @@ namespace smart_local
             System.Console.WriteLine($"----- Authorization Response -----");
             System.Console.WriteLine(json);
             System.Console.WriteLine($"----- Authorization Response -----");
+
+            SmartResponse smartResponse = JsonSerializer.Deserialize<SmartResponse>(json);
+        }
+
+        /// <summary>
+        /// use SMART token with the fhir Net API
+        /// </summary>
+        /// <param name="smartResponse"></param>
+        public static void DoSomethingWithToken(SmartResponse smartResponse)
+        {
+            if (smartResponse == null)
+            {
+                throw new ArgumentNullException(nameof(smartResponse));
+            }
+
+            if (string.IsNullOrEmpty(smartResponse.AccessToken))
+            {
+                throw new ArgumentNullException("SMART Access Token is requiered!");
+            }
+
+            Hl7.Fhir.Rest.FhirClient fhirClient = new Hl7.Fhir.Rest.FhirClient(_fhirServerUrl);
         }
 
         /// <summary>
